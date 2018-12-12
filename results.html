@@ -91,6 +91,24 @@
         <div class="col-lg-12 text-left" id = "1-testing-framework">
 
             <h6 class="mt-5">1. Testing Framework</h6>
+            
+            <p> <b> Song Validation Method: </b> For a given playlist, we randomly sampled a subset of songs (usually about 80%) from
+                that playlist and used these as input "training data" for our model. The remaining songs (usually about 20%) were used 
+                as "testing data." We then ran our model (both pooling and ranking) on the training data and returned as output our 
+                highest ranked songs (usually the same number of songs as in the testing data). Our metric for success in this case 
+                was the number of songs in the testing data that appeared in our output. </p>
+                
+            <p> With this validation method, we often found that few songs from the testing data appeared in our model's output. 
+                We find this to be quite reasonable, since there are many songs that could properly extend a given subset of a playlist.
+                Further, with so many available songs to choose from, it would be remarkable if any model could consistently predict
+                the songs in the testing set, especially when one considers that the playlists we have were assembled by the arbitrary
+                tastes of Spotify users, and there is no objective measure of what properly constitutes a cohesive playlist. </p>
+                
+            <p> <b> Artist Validation Method: </b> We sought a second method of validation, to see if we could improve performance. The 
+                procedure we used was identical to that of the <b> Song Validation Method</b>, except we redefine the metric of success
+                to be the number of artists that appeared in the testing data that also appeared in out output. </p>
+            
+            <p> We saw similar results with this testing framework, for the same reasons as listed above. </p>    
 
         </div>
     </div>
@@ -131,7 +149,7 @@
     <div class="row">
         <div class="col-lg-12 text-left" id = "2-future-work">
 
-            <h6 class="mt-5">1. Future Work</h6>
+            <h6 class="mt-5">2. Future Work</h6>
 
         </div>
     </div>
