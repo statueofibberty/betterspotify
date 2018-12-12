@@ -57,23 +57,57 @@
         <div class="col-lg-12 text-left">
           <h2 class="mt-5">CS109 Fall 2018 Final Project -- BetterSpotify</h2>
           <h6 class="mt-5">Presented by Jessica Bishai, Alexander Barrett, Cameroon Chiarello, and Ibby Syed <br> TF Assignment:  Mehul</h6>
-          <h6 class="mt-5">Motivation</h6>
+          <h5 class="mt-5">Motivation</h5>
 
           <p><b>Our motivation for this project </b> was to take all the information that we built on in CS109 and use
             the Spotify Million Playlists Dataset and the Spotify API to create a <b>playlist extension tool</b>. A
             user should be able to use the tool to input a playlist and get song suggestions that extend that
             playlist with similar songs to enjoy, the idea being that they fit in with the playlist. </p>
 
-          <br>
 
           <p> We did this in a three step process - the first involved loading the dataset and downloading all of the
           features using the Spotify API (see the <a href="intro.html">EDA</a> for more details). Following this, we
-            implemented a pooling model that pooled various features together, after which we used </p>
+            implemented a pooling model that pooled the various artist genres that were present, after which
+            we vectorized the different features for every song that we had data for and used a cosine similarity matrix
+            to measure the features against each other. After standardizing these, both models together gave a
+            recommendation of all the possible songs that would extend the playlist. </p>
 
-          <ul class="list-unstyled">
-            <li>Point 1</li>
-            <li>Point 2</li>
-           </ul>
+          <h5 class="mt-5">How Spotify Currently Does This</h5>
+
+          <p><b>Spotify currently uses three different algorithms to detect your songs: </b> They first use a
+            collaborative filtering model (think back to when you gave a song a "thumbs-up" on Pandora) to get pool
+          together the likes of different people and create different songs within a specific category. This is called
+          "Collaborative Filtering"</p>
+
+          <p>The second type of algorithm is called <b>Natural Language Processing</b>. In a nutshell, Spotify takes a
+          track's metadata and the verbiage around the internet, and assigns a score to each song based on the metadata
+          and how relevant it might be to other songs.</p>
+
+          <p>Lastly, they use <b>an audio model</b>. For songs that are up-and coming and new, Spotify will analyze
+            the audio using a CNN and categorize it as based on how close it is to other songs. This means that new songs
+            are able to be discovered. </p>
+
+          <p>For more information about these, head on over to <a href="https://medium.com/s/story/spotifys-discover-
+          weekly-how-machine-learning-finds-your-new-music-19a41ab76efe">Medium</a> for more info. </p>
+
+          <img src="img/spotify-works.png" alt="Spotify">
+
+          <h5 class="mt-5">How Pooling Works</h5>
+
+          <p> We go into more detail about this in the model section, but in a nutshell: feature pooling is usually used
+          in image classification, where certain features are grouped together, so similarity can be assesed better later
+          in the chain. The image below explains how this works: </p>
+
+          <img src="img/Pooling_schematic.gif" alt="Spotify">
+
+          <p> We used this method to pool artist genres for songs together -- more detail can be found in the model section. </p>
+
+          <h5 class="mt-5">Feature Vectorizing</h5>
+
+          <p> We used feature vectorizing to go through and </p>
+
+
+
          </div>
        </div>
      </div>
