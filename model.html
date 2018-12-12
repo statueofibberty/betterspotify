@@ -29,7 +29,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="index.html">Home
                     </a>
                 </li>
@@ -39,7 +39,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="review.html">Literature Review and Related Work</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="model.html">Models</a>
                     <span class="sr-only">(current)</span>
                 </li>
@@ -55,10 +55,14 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12 text-left">
-            <h2 class="mt-5">Our Models</h2>
+            <h2 class="mt-5">Models</h2>
 
             <h6 class="mt-5">Table of Contents</h6>
-
+                <ul id="markdown-toc">
+                    <li><a href="#1-introduction-to-models" id="markdown-toc-1-introduction-to-models">1. Introduction to Models</a></li>
+                    <li><a href="#2-pooling-model" id="markdown-toc-2-pooling-model">2. Pooling Model</a></li>
+                    <li><a href="#3-ranking-model" id="markdown-toc-3-ranking-model">3. Ranking Model</a></li>
+                </ul>
 
 
 
@@ -68,13 +72,68 @@
 
     <!-- First Section -->
 
-    <h4 class="mt-5" id = first >Model 1</h4>
+    <h4 class="mt-5" id = 1-introduction-to-models >1. Introduction to Models</h4>
 
     <div class="row">
-        <div class="col-lg-12 text-left" id = "1-experiment-details">
 
-            <h6 class="mt-5"> hello I am cam this is a test </h6>
+    <div class="col-lg-12 text-left">
+            <p>
+                Almost all of the models we have learned in class dealt with either classification or regression; that is to say, given a set of features, we have predicted a response.  The goal of this project is playlist extension which can not be easily translated into a regression or classification problem, even though we tried with our baseline model described earlier. So, we approached this problem with a two-part model different than anything we have seen thus far in CS109A.
+            </p>
+            <p>
+                Because Spotify has so many songs, even when we only consider the songs present on the 5,000 playlists that we chose to subset, it is infeasible - and inefficient - to consider all possible songs when attempting to extend a playlist. To alleviate these concerns, we first determine the best pool of songs to think about given the songs that we know are already a part of the playlist.
+            </p>
+            <p>
+                Next, we must consider how well each of these pooled songs would fit into our playlist. To do this, we look at the average feature set of all songs in the input playlist as well as the features of all songs in the pool. We then determine which songs are most compatible with the average song in the playlist.
+            </p>
+
+        </div>
+    </div>
+
+    <h4 class="mt-5" id = 2-pooling-model >2. Pooling Model</h4>
+
+    <div class="row">
+        <div class="col-lg-12 text-left">
+            <p>
+                The first of the two models we had to create was the pooling model. The goal of the pooling model was to find a subset of all of Spotify’s songs that it would be reasonable to consider extending the playlist with. The pooling model was created with the idea that choosing songs from a subset would be much less computationally complex than considering every song possible.
+            </p>
+            <p>
+                This model required two data inputs-- a playlist from the playlists dataframe, and a songs dataframe containing all songs on Spotify and some of their features. The pool of songs returned by the model was determined by the tagged artist genres on the input playlist.
+            </p>
+            <p>
+                We split the model into four sub-functions: ‘get_genres’, ‘count_genres’, ‘cutoff’, and ‘get_pool’. ‘get_genres’ removes songs with missing information from the songs dataframe, then uses the Track URI of each song in the playlist to pull that song’s features from the songs dataframe. It returns the genres associated with each song’s artist.
+            </p>
+            <p>
+                The function ‘count_genres’ takes in the genres returned by ‘get_genres’ and returns a list of how many times each artist genre occurred in the playlist.
+            </p>
+            <p>
+                The function ‘cutoff’ takes in the list of counts from ‘count_genres’ and the songs dataframe (containing all songs). It sets the cutoff of how many times the genre should appear for it to be included in the pool. Using trial and error, we found that taking only the most popular genre was effective (largely because songs tend to be tagged with multiple genres, and the most popular genres are typically broader categories).
+            </p>
+            <p>
+                We erred on the side of having a larger pool that would minimize leaving songs out that truly belonged on the playlist.
+
+            </p>
+
             <script src="https://gist.github.com/chiarellica/d22a9c7fd1d723e4f7a35172c81754ff.js"></script>
+
+        </div>
+    </div>
+
+    <h4 class="mt-5" id = 3-ranking-model >3. Ranking Model</h4>
+
+    <div class="row">
+        <div class="col-lg-12 text-left">
+            <p>
+                The second of the two models we had to create was the pooling model. The goal of the ranking model was to, as the name suggests, rank all songs that the pooling model had selected from the total song data set in terms of their compatibility with the inputted data set. The recommendations for songs to be added to the playlist would then be whichever songs had the highest similarity score with the average feature set of the inputted playlist.
+            </p>
+            <p>
+                The first function ‘get_avg_vector’ takes in simply the playlist in dictionary form and returns the average feature set of the playlist, as well as the pool of songs to be used later.  The function selects the tracks from the inputted playlist and gets the corresponding pool using the first model. It then merges the playlist songs with the features from the pooled songs (and the playlist songs), and finally aggregates the songs in the pool. (Note: we aggregate via both mean and sum because we originally added together the lists of genres to one-hot encode as binary predictors, but we ultimately felt this information was captured in the pooling process.)
+            </p>
+            <p>
+                The second function ‘get_reccs’ takes in as inputs the playlist in dictionary form, the number of song recommendations desired with default 10, and the number of features to be dropped in the fitting process, if any, with default 0. The function creates a feature matrix by combining the average vector with the pool, and then calculates the cosine similarity matrix from this feature matrix. We are only interested in the last row of this matrix which represents the similarity scores between the average vector and each pooled song. It then sorts these scores and returns the URIs (essentially Spotify ID codes) of both the songs and the artists as well as the actual titles and artist names of the recommendations; it also returns which variables were dropped in the fitting process, if any.
+            </p>
+
+            <script src="https://gist.github.com/chiarellica/20e64992755d01671f05912564d15693.js"></script>
 
         </div>
     </div>
