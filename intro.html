@@ -62,19 +62,19 @@
 
             <ul id="markdown-toc">
                 <li><a href="#1-introduction-and-description-of-data" id="markdown-toc-1-introduction-and-description-of-data">1. Introduction and Description of Data</a>    <ul>
-                    <li><a href="#1-experiment-details" id="markdown-toc-1-experiment-details">1) Experiment Details</a></li>
-                    <li><a href="#2-description-of-raw-data" id="markdown-toc-2-description-of-raw-data">2) Description of Raw Data</a></li>
-                    <li><a href="#3-additional-feature-engineering" id="markdown-toc-3-additional-feature-engineering">3) Additional Feature Engineering</a></li>
-                    <li><a href="#4-further-data-manipulation---removing-predictors" id="markdown-toc-4-further-data-manipulation---removing-predictors">4) Further Data Manipulation</a></li>
-                    <li><a href="#5-standardization" id="markdown-toc-5-standardization">5) Standardization</a></li>
-                    <li><a href="#6-playlist-selection" id="markdown-toc-6-playlist-selection">6) Playlist Selection</a></li>
+                    <li><a href="#1-playlist-selection" id="markdown-toc-1-playlist-selection">1) Playlist Selection</a></li>
+                    <li><a href="#2-spotify-api" id="markdown-toc-2-spotify-api">2) Using Spotify's API to Acquire Song Features</a></li>
+                    <li><a href="#3-feature-processing" id="markdown-toc-3-feature-processing">3) Feature Pre-Processing</a></li>
+                    <li><a href="#4-feature-selection" id="markdown-toc-4-feature-selection">4) Feature Selection</a></li>
+<!--                     <li><a href="#5-standardization" id="markdown-toc-5-standardization">5) Standardization</a></li> -->
+<!--                     <li><a href="#6-playlist-selection" id="markdown-toc-6-playlist-selection">6) Playlist Selection</a></li> -->
                 </ul>
-                </li>
+<!--                 </li>
                 <li><a href="#2-eda" id="markdown-toc-2-eda">2. EDA</a>    <ul>
                     <li><a href="#1-eda-for-3-class-classification-flatground-uphill-downhill" id="markdown-toc-1-eda-for-3-class-classification-flatground-uphill-downhill">1) EDA for Spotify API Pull</a></li>
                 </ul>
                 </li>
-            </ul>
+            </ul> -->
 
 
 
@@ -86,9 +86,42 @@
     <h4 class="mt-5" id = 1-introduction-and-description-of-data >Introduction and Description of Data</h4>
 
     <div class="row">
-        <div class="col-lg-12 text-left" id = "1-experiment-details">
+        <div class="col-lg-12 text-left" id = "1-playlist-selection">
 
-            <h6 class="mt-5">1. Experiment Details </h6>
+            <h6 class="mt-5">1. Playlist Selection </h6>
+            
+            <p> We also used Spotify's "Million Playlist Dataset," which contains one million playlists created by Spotify users
+            between January 2010 and October 2017. Each playlist in the dataset contains the following information: collaboration 
+            status, name, duration, time of most recent modification, number of albums contained, number of artists, number of edits,
+            number of followers, number of tracks, and playlist identification number. In addition, it also contains the list of 
+            tracks for that playlist, and each track has the following information: album name, album id, artist name, artist id, 
+            track name, track id, and position in the playlist.           
+            </p>
+            
+            <p> These playlists will later be used in the evaluation of our model. To ensure that the scope of the playlist dataset is 
+                of reasonable scope, we chose to sample 5,000 playlists from the million. We chose to sample playlists that contained 
+                between 40 and 60 songs, since this was to most representative size from the million playlists that was large enough 
+                to be used for evaluation. We also decided to sample only playlists that had at least 6 artists. We want to ensure that 
+                our selected playlists are robust, and contain an appropriate range of different types of music. This minimum bound on 
+                the number of artists is a useful proxy for the range of music contained within a playlist. Of all of the playlists that
+                met these criteria, we conducted a simple random sample to choose 5,000 playlists. </p>
+            
+            <figure>
+                  <img src="betterspotify/img/playlist_loading.PNG" alt="Spotify" width="500" height="600">
+                  <figcaption>Code for playlist loading and selection. </figcaption>
+            </figure>           
+            
+            <div class="column">
+                <img src="betterspotify/img/songs_hist.PNG" alt="Spotify" width="500" height="600">
+            </div>
+            <div class="column">
+                <img src="betterspotify/img/artists_hist.PNG" alt="Spotify" width="500" height="600">
+            </div>
+            
+            <p> Our 5,000 playlists contain 82,056 unique songs and 21,293 unique artists. We see that the number of artists on 
+            our playlists appear to be approximately normally distributed, while the number of songs in our playlists if fairly even
+            across our range, with a slight decrease in frequency as we increase from 40 songs, but with a peak at 60 songs. </p> 
+                
 
         </div>
     </div>
@@ -96,9 +129,9 @@
     <!-- Second Section -->
 
     <div class="row">
-        <div class="col-lg-12 text-left" id = "2-description-of-raw-data">
+        <div class="col-lg-12 text-left" id = "2-spotify-api">
 
-            <h6 class="mt-5">2. Description of Raw Data </h6>
+            <h6 class="mt-5">2. Using Spotify's API to Acquire Song Features </h6>
 
         </div>
     </div>
@@ -106,9 +139,9 @@
     <!-- Third Section -->
 
     <div class="row">
-        <div class="col-lg-12 text-left" id = "3-additional-feature-engineering">
+        <div class="col-lg-12 text-left" id = "3-feature-processing">
 
-            <h6 class="mt-5">3. Additional Feature Engineering </h6>
+            <h6 class="mt-5">3. Feature Pre-Processing </h6>
 
         </div>
     </div>
@@ -117,14 +150,14 @@
     <!-- Fourth Section -->
 
     <div class="row">
-        <div class="col-lg-12 text-left" id = "4-further-data-manipulation---removing-predictors">
+        <div class="col-lg-12 text-left" id = "4-feature-selection">
 
-            <h6 class="mt-5">4. Further Data Manipulation and Removing Predictors </h6>
+            <h6 class="mt-5">4. Feature Selection </h6>
 
         </div>
     </div>
 
-    <!-- Fifth Section -->
+<!--     <!-- Fifth Section -->
 
     <div class="row">
         <div class="col-lg-12 text-left" id = "5-standardization">
@@ -190,7 +223,7 @@
         </div>
     </div>
 
-
+ -->
 
 </div>
 
