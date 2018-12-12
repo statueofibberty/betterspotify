@@ -78,7 +78,71 @@
                   <script src="https://gist.github.com/<gist_id>.js"> </script>
                   <noscript>
                     <pre>
-                       
+                       def get_genres(plist, songs_df):
+    
+    null_ids = songs_df[songs_df.isnull().any(axis=1)].track_uri.values
+    
+    tracks_we_have = songs_df['track_uri'].values
+    
+    # Initialize an empty list to store the track IDs of songs in each playlist
+    track_ids = []
+    # Iterate through tracks in the playlist
+    for song in plist['tracks']:
+        # Make sure the track in the playlist does not have any missing data
+        if song['track_uri'] not in null_ids:
+            if song['track_uri'] in tracks_we_have:
+                # Store the track ID of the song.
+                track_ids.append(song['track_uri'])
+     
+    # Initialize an empty list to store the genres of the artist for each song in the playlist
+    genres = []
+    # Iterate through the songs in the playlist
+    for track_id in track_ids:
+        # Locate the track in the dataframe of songs
+        track_info = songs_df.loc[songs_df['track_uri'] == track_id]
+        # Pull out artist genres from the datafrome of songs and store it in 'genres'
+        for artist_genre in list(track_info.artist_genres.values)[0]:
+            genres.append(artist_genre)
+            
+    return genres
+    
+    
+def count_genres(genres):
+    # Create a list of unique genres of the genres we have stored
+    uniques = np.unique(np.array(genres))
+    # Initialize an empty list of counts for the genres
+    counts = []
+    # Iterate through songs, crate a list of lists containing the genre and how many times the genre appears in the playlist
+    for u in uniques:
+        counts.append([u, genres.count(u)])
+        
+    return counts
+
+def cutoff(counts, songs_df):
+    
+    # Turn the list of counts into a dataframe
+    df = pd.DataFrame(counts, columns=['genre', 'count'])
+    # Choose how many times the genre should appear for it to be included-- the max between the 50th percentile and 3
+    #cutoff = max(np.percentile(df['count'].values, 50), 3)
+    cutoff = max(df['count'])
+    # Find the genres we are going to include (valid genres)
+    valid_genres = set(df[df['count'] >= cutoff].genre.values)    
+    
+    valid_indices = [] 
+    
+    # Iterate through the rows of the songs dataframe
+    for index, row in songs_df.iterrows():
+        # Store the indices of all songs for which at least one of the artist genres is a valid genre
+        artist_genres = set(row.artist_genres)
+        if artist_genres.intersection(valid_genres) != set([]):
+            valid_indices.append(index)
+            
+    return songs_df.loc[valid_indices]
+
+def get_pool(plist, songs_df):
+    genres = get_genres(plist, songs_df.dropna())
+    counts = count_genres(genres)
+    return cutoff(counts, songs_df.dropna())
                     </pre>
                   </noscript>
                 </p>
