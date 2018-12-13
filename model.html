@@ -107,11 +107,10 @@
                 The function ‘count_genres’ takes in the genres returned by ‘get_genres’ and returns a list of how many times each artist genre occurred in the playlist.
             </p>
             <p>
-                The function ‘cutoff’ takes in the list of counts from ‘count_genres’ and the songs dataframe (containing all songs). It sets the cutoff of how many times the genre should appear for it to be included in the pool. Using trial and error, we found that taking only the most popular genre was effective (largely because songs tend to be tagged with multiple genres, and the most popular genres are typically broader categories).
+                The function ‘cutoff’ takes in the list of counts from ‘count_genres’ and the songs dataframe (containing all songs). It sets the cutoff of how many times the genre should appear for it to be included in the pool. Using trial and error, we found that taking only the most popular genre was effective (largely because songs tend to be tagged with multiple genres, and the most popular genres are typically broader categories). Using more genres did not shrink the size of the pool enough. ‘cutoff’ then creates the pool by iterating through the songs dataframe and pulling the indices of the songs that have genres match the top genre found earlier.
             </p>
             <p>
-                We erred on the side of having a larger pool that would minimize leaving songs out that truly belonged on the playlist.
-
+                Finally, the function `get_pool` combines `get_genres`, `count_genres`, and `cutoff` to return the pool.
             </p>
 
             <script src="https://gist.github.com/chiarellica/d22a9c7fd1d723e4f7a35172c81754ff.js"></script>
