@@ -118,7 +118,22 @@
     <div class="row">
         <div class="col-lg-12 text-left" id = "2-model-variations">
 
-            <h6 class="mt-5">2. Model Variations</h6>
+            <h6 class="mt-5">2. Feature Selection and Model Variations </h6>
+            
+            <p> <b> Feature Selection: </b> We took several approached to feature selection. Within our testng framework, it is difficult
+                to discriminate between different methods of feature selection, however we have found several approaches we find to be 
+                valid. Of our features, we determined several which should be dropped. These include the track's key, time signature, 
+                duration, and position in playlist. Intuitively, these features wouldn't discriminate well the types of songs we'd like 
+                to select (for example, two totally different songs can have the same duration, key, or time signature). </p>
+            
+            <p> Once we had our set of features, we took several approaches in their use. We examined models both with and without
+                the "artist genre" feature. When included, we one-hot encoded artist genre. We decided to exclude artist genre in our 
+                ranking model, since we had already used it in the pooling model, and the large list of artist genres made one-hot 
+                encoding rather expensive to run. We also experimented with dropping out some of our remaining features to evaluate 
+                their relative importance, and we also tried weighting some features more heavily than others when evaluating cosine 
+                similarity. Ultimately, we decided our best model was (TO DO : .... )
+            </p>
+
 
         </div>
     </div>
