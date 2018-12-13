@@ -29,7 +29,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="index.html">Home
                     </a>
                 </li>
@@ -42,7 +42,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="model.html">Models</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="results.html">Results and Conclusion</a>
                     <span class="sr-only">(current)</span>
                 </li>
@@ -120,7 +120,7 @@
 
             <h6 class="mt-5">2. Feature Selection and Model Variations </h6>
             
-            <p> <b> Feature Selection: </b> We took several approached to feature selection. Within our testng framework, it is difficult
+            <p> We took several approached to feature selection. Within our testng framework, it is difficult
                 to discriminate between different methods of feature selection, however we have found several approaches we find to be 
                 valid. Of our features, we determined several which should be dropped. These include the track's key, time signature, 
                 duration, and position in playlist. Intuitively, these features wouldn't discriminate well the types of songs we'd like 
@@ -131,7 +131,7 @@
                 ranking model, since we had already used it in the pooling model, and the large list of artist genres made one-hot 
                 encoding rather expensive to run. We also experimented with dropping out some of our remaining features to evaluate 
                 their relative importance, and we also tried weighting some features more heavily than others when evaluating cosine 
-                similarity. Ultimately, we decided our best model was (TO DO : .... )
+                similarity. 
             </p>
 
 
@@ -156,6 +156,12 @@
 
             <h6 class="mt-5">1. Conclusions</h6>
 
+            <p> The goal of this project was to create a playlist extension tool for Spotify users. The tool was designed to take a user's
+                playlist as input, and provide a series of suggested songs similar to the songs in their playlist. Ultimately, while our
+                model successfully predicts a series of songs for the user, we don't have a well-established framework in which to 
+                evaluate its successes and shortcomings. We find that our methods are accurate, and that given the proper testing
+                framework we would be able to improve its predictive power. </p>
+            
         </div>
     </div>
     
@@ -165,6 +171,16 @@
         <div class="col-lg-12 text-left" id = "2-future-work">
 
             <h6 class="mt-5">2. Future Work</h6>
+            
+            <p> To expand and improve our current model, we could examine the effects of interaction terms on our current features. We 
+                could also try and find a better proxy for track genre than our current use of artist genre. Spotify stores a genre for 
+                each album (not individual songs). Perhaps using album genre, or both album and artist genre, would be a better surrogate
+                for track genre. </p>
+            
+            <p> We could also try and use a completely different framework. One of the challenges of this project was the lack of an
+                appropriate response variable, which prevented us from using many of the modelling techniques that we used in CS109a. 
+                It would be interesting to pursue different unsupervised learning techniques (for example, k means clustering)
+                to see if we could improve our predictions. 
 
         </div>
     </div>
