@@ -29,11 +29,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="index.html">Home
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="intro.html">Introduction and EDA</a>
                     <span class="sr-only">(current)</span>
                 </li>
@@ -63,11 +63,9 @@
             <ul id="markdown-toc">
 <!--                 <li><a href="#1-introduction-and-description-of-data" id="markdown-toc-1-introduction-and-description-of-data">1. Introduction and Description of Data</a>    <ul> -->
                     <li><a href="#1-playlist-selection" id="markdown-toc-1-playlist-selection">1) Playlist Selection</a></li>
-                    <li><a href="#2-spotify-api" id="markdown-toc-2-spotify-api">2) Using Spotify's API to Acquire Song Features</a></li>
-                    <li><a href="#3-feature-processing" id="markdown-toc-3-feature-processing">3) Feature Pre-Processing</a></li>
-                    <li><a href="#4-feature-selection" id="markdown-toc-4-feature-selection">4) Feature Selection</a></li>
-<!--                     <li><a href="#5-standardization" id="markdown-toc-5-standardization">5) Standardization</a></li> -->
-<!--                     <li><a href="#6-playlist-selection" id="markdown-toc-6-playlist-selection">6) Playlist Selection</a></li> -->
+                    <li><a href="#2-data-trends-and-baseline-model" id="markdown-toc-2-data-trends-and-baseline-model">2) Data Trends and Baseline Model</a></li>
+                    <li><a href="#3-spotify-api" id="markdown-toc-3-spotify-api">3) Using Spotify's API to Acquire Song Features</a></li>
+                    <li><a href="#4-feature-exploration-and-standardization" id="markdown-toc-4-feature-exploration-and-standardization">4) Feature Exploration and Standardization</a></li>
                 </ul>
 <!--                 </li>
                 <li><a href="#2-eda" id="markdown-toc-2-eda">2. EDA</a>    <ul>
@@ -90,7 +88,7 @@
 
             <h6 class="mt-5">1. Playlist Selection </h6>
             
-            <p> We used Spotify's "Million Playlist Dataset," which contains one million playlists created by Spotify users
+            <p> We also used Spotify's "Million Playlist Dataset," which contains one million playlists created by Spotify users
             between January 2010 and October 2017. Each playlist in the dataset contains the following information: collaboration 
             status, name, duration, time of most recent modification, number of albums contained, number of artists, number of edits,
             number of followers, number of tracks, and playlist identification number. In addition, it also contains the list of 
@@ -110,9 +108,9 @@
                   <img src="img/playlist_loading.PNG" alt="Spotify" width="500" height="375">
                   <figcaption>Code for playlist loading and selection. </figcaption>
             </figure>    
-            
+
         </div>
-        
+
         <div class="row">
             <div class="col-lg-6 text-left">
                     <img src="img/songs_hist.PNG" alt="Spotify" width="500" height="400">
@@ -120,12 +118,15 @@
             <div class="col-lg-6 text-left">
                     <img src="img/artists_hist.PNG" alt="Spotify" width="500" height="400">
             </div>
+
         </div>
-        
+
         <div class="row">
-            <p> Our 5,000 playlists contain 82,056 unique songs and 21,293 unique artists. We see that the number of artists on 
-            our playlists appear to be approximately normally distributed, while the number of songs in our playlists if fairly even
-            across our range, with a slight decrease in frequency as we increase from 40 songs, but with a peak at 60 songs. </p>              
+            <div class="col-lg-12 text-left">
+                <p> Our 5,000 playlists contain 82,056 unique songs and 21,293 unique artists. We see that the number of artists on
+                    our playlists appear to be approximately normally distributed, while the number of songs in our playlists if fairly even
+                    across our range, with a slight decrease in frequency as we increase from 40 songs, but with a peak at 60 songs. </p>
+            </div>
         </div>
 
     </div>
@@ -133,42 +134,70 @@
     <!-- Second Section -->
 
     <div class="row">
-        <div class="col-lg-12 text-left" id = "2-spotify-api">
+        <div class="col-lg-12 text-left" id = "2-data-trends-and-baseline-model">
 
-            <h6 class="mt-5">2. Using Spotify's API to Acquire Song Features </h6>
+            <h6 class="mt-5">2. Data Trends and Baseline Model</h6>
 
-            <p> For each of our unique songs, we queried the Spotify API to acquire song features. The features for each track are:
-                acousticness, danceability, duration, energy, instrumentalness, key, liveness, loudness, mode (indicator of whether 
-                the key is major or minor), speechiness, tempo, time signature, and valence (measure of positiveness of the track).
-                Each track also has artist information, which has features: artist genres and artist popularity. </p>
-                
-                
-            
-            
-            
+            <p>In our earlier data exploration, we explored trends such as genre, artist, and song occurrences and a selected subset of playlists. Below is one example of those plots: the number of times the top 20 genres appear on a randomly selected 10,000 songs.</p>
+
+            <img src="img/genreplot.png" alt="Spotify" width="550" height="450">
+
+            <p>We commented on how the total number of genres seems much greater than the number of songs, but then we realized we were counting multiple genres per song, which is not necessarily a bad thing.</p>
+
+            <p>Using this playlist data, we also created a baseline model based on the idea of song co-occurrences. Collaborative filtering, which is discussed in the literature review, builds upon this idea. Essentially, we used the binary variable of whether each pairing of songs appeared together on any of the playlist as a predictor, as well as the duration of the song and one-hot encoded artist. We decided to choose song popularity as the response variable, which we represented as the total number of times each observation (song) appeared on any of the playlists. This linear regression model had an R^2 of greater than 90% on the training data, but had its cross-validation R^2 hover around 0 unfortunately.</p>
+
+            <script src="https://gist.github.com/chiarellica/c25ca1f124c02b5b1fce7668258d2bd0.js"></script>
+
+            <p>Not only did this baseline model not perform well on test data, it also was difficult to conceptualize a proper response variable for answering the problem of playlist continuation. This made us realize that accessing the Spotify API to find more audio features for each song was necessary. Fitting this baseline model was, though, helpful for making us think of what exactly we were trying to accomplish.</p>
+
         </div>
     </div>
 
     <!-- Third Section -->
 
     <div class="row">
-        <div class="col-lg-12 text-left" id = "3-feature-processing">
+        <div class="col-lg-12 text-left" id = "3-spotify-api">
 
-            <h6 class="mt-5">3. Feature Pre-Processing </h6>
+            <h6 class="mt-5">3. Using Spotify's API to Acquire Song Features </h6>
 
+            <p> For each of our unique songs, we queried the Spotify API to acquire song features. The features for each track are:
+                acousticness, danceability, duration, energy, instrumentalness, key, liveness, loudness, mode (indicator of whether 
+                the key is major or minor), speechiness, tempo, time signature, and valence (measure of positiveness of the track).
+                Each track also has artist information, which has features: artist genres and artist popularity. </p>
+
+            <p>The below code queries the Spotify API to acquire the aforementioned features.</p>
+
+            <script src="https://gist.github.com/chiarellica/9e539ef696cf39372991811b1e3dadee.js"></script>
+            
         </div>
     </div>
-
 
     <!-- Fourth Section -->
 
     <div class="row">
-        <div class="col-lg-12 text-left" id = "4-feature-selection">
+        <div class="col-lg-12 text-left" id = "4-feature-exploration-and-standardization">
 
-            <h6 class="mt-5">4. Feature Selection </h6>
+            <h6 class="mt-5">4. Feature Exploration and Standardization</h6>
+
+            <p>In exploring the features made available through the Spotify API, we noticed some trends. The plot below exhibits the relationships between all of the predictors.</p>
+
+            <img src="img/featureplots.png" alt="Spotify" width="1000" height="800">
+
+            <p>The interesting trends could potentially tell us about which features to include our models, as it is not typically advisable to fit on multicollinear data. However, considering how few predictors we have compared to the magnitude of our data set, we chose to keep nearly all predictors.</p>
+
+            <p>We noticed that acousticness seems to have negative correlation with, understandably, both energy and loudness. Artist popularity does not have many clear correlations with other predictors. Danceability has a slight relationship with acousticness and valence. Energy has positive correlation with loudness and valence. Instrumentalness has a negative relationship with liveness and speechiness. Liveness has a positive relationship with energy and loudness. Ultimately, we see that a lot of these features unfortunately capture very similar information.</p>
+
+            <p>We also plotted histograms of several of the audio features below:</p>
+
+            <img src="img/featuregrams.png" alt="Spotify" width="650" height="500">
+
+            <p>We noticed that, although many of these predictors are already normalized, some are on completely different scales (like artist popularity) or entriely negative (like loudness). We decided to standardize each predictor variable to keep everything on a consistent basis.</p>
+
+            <script src="https://gist.github.com/chiarellica/099e416a77776da4db23503657538e2b.js"></script>
 
         </div>
     </div>
+
 
    
 </div>
